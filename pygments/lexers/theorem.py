@@ -23,7 +23,7 @@ class SquirrelLexer(RegexLexer):
     """
     For the Squirrel protocol prover.
 
-    .. versionadded:: 1.5
+    .. versionadded:: 1.0
     """
 
     name = 'Squirrel'
@@ -35,7 +35,6 @@ class SquirrelLexer(RegexLexer):
     flags = 0 # no re.MULTILINE
 
     keywords_prog = (
-        # Gallina prog OK
         "let",
         "in",
         "out",
@@ -46,11 +45,9 @@ class SquirrelLexer(RegexLexer):
         "new",
         "try find",
         "such that",
-        'forall', 'exists'
     )
 
     keywords_glob = (
-        # Vernacular commands global OK
         "include",
         "set",
         "axiom",
@@ -64,13 +61,11 @@ class SquirrelLexer(RegexLexer):
     )
 
     keywords_dangerous = (
-        # dangerous OK
         "Abort",
         "admit",
     )
 
     keywords_decl = (
-        # decl OK
         "aenc",
         "signature",
         "hash",
@@ -90,7 +85,6 @@ class SquirrelLexer(RegexLexer):
     )
 
     keywords_fun = (
-        # fun OK
         "input",
         "cond",
         "output",
@@ -104,7 +98,6 @@ class SquirrelLexer(RegexLexer):
     )
 
     keywords_type = (
-        # Sorts
         "index",
         "message",
         "boolean",
@@ -115,7 +108,6 @@ class SquirrelLexer(RegexLexer):
     )
 
     keywords_tactic = (
-        # Tactics OK
         "anyintro",
         "use",
         "with",
@@ -192,7 +184,6 @@ class SquirrelLexer(RegexLexer):
     )
 
     keywords_closing = (
-        # Closing OK
         "by",
         "assumption",
         "congruence",
@@ -203,7 +194,6 @@ class SquirrelLexer(RegexLexer):
     )
 
     keywords_tactical = (
-        # Control OK
         "try",
         "orelse",
         "repeat",
@@ -212,6 +202,7 @@ class SquirrelLexer(RegexLexer):
         "exn",
     )
 
+    # Mostly taken from Coq lexer but not (yet) all in squirrel language
     keyopts = (
         '!=', '#', '&', '&&', r'\(', r'\)', r'\*', r'\+', ',', '-', r'-\.',
         '->', r'\.', r'\.\.', ':', '::', ':=', ':>', ';', ';;', '<', '<-',
@@ -225,6 +216,7 @@ class SquirrelLexer(RegexLexer):
     prefix_syms = r'[!?~]'
     infix_syms = r'[=<>@^|&+\*/$%-]'
 
+    # Mostly taken from Coq lexer but not (yet) all in squirrel language
     tokens = {
         'root': [
             (r'\s+', Text),
@@ -248,6 +240,7 @@ class SquirrelLexer(RegexLexer):
 
             (r"[^\W\d][\w']*", Name),
 
+            # Not in Squirrel but still better to have ↓
             (r'\d[\d_]*', Number.Integer),
             (r'0[xX][\da-fA-F][\da-fA-F_]*', Number.Hex),
             (r'0[oO][0-7][0-7_]*', Number.Oct),
@@ -268,12 +261,12 @@ class SquirrelLexer(RegexLexer):
             (r'\*\)', Comment, '#pop'),
             (r'[(*)]', Comment),
         ],
+        # We may have different highlight rules when in a Proof…
     }
 
     def analyse_text(text):
         if 'Qed' in text and 'Proof' in text:
             return 1
-
 
 class CoqLexer(RegexLexer):
     """
